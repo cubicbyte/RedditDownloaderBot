@@ -100,14 +100,15 @@ func (c *Client) fetchPostDetailsAndSend(bot *gotgbot.Bot, ctx *ext.Context) err
 	}
 	// Check the result type
 	toSendText := ""
-	toSendOpt := &gotgbot.SendMessageOpts{
-		ParseMode: gotgbot.ParseModeMarkdownV2,
-	}
+	toSendOpt := &gotgbot.SendMessageOpts{}
 	switch data := result.(type) {
 	case reddit.FetchResultText:
-		toSendText = addLinkIfNeeded(data.Title+"\n"+data.Text, realPostUrl)
+		toSendText = escapeMarkdown(data.Title + "\n" + data.Text)
+		toSendText = addLinkIfNeeded(toSendText, realPostUrl)
+		toSendOpt.ParseMode = gotgbot.ParseModeMarkdownV2
 	case reddit.FetchResultComment:
-		toSendText = addLinkIfNeeded(data.Text, realPostUrl)
+		toSendText = addLinkIfNeeded(escapeMarkdown(data.Text), realPostUrl)
+		toSendOpt.ParseMode = gotgbot.ParseModeMarkdownV2
 	case reddit.FetchResultMedia:
 		if len(data.Medias) == 0 {
 			toSendText = "No media found."
@@ -185,10 +186,6 @@ func (c *Client) fetchPostDetailsAndSend(bot *gotgbot.Bot, ctx *ext.Context) err
 		toSendText = "Unknown type (Please report this on the main GitHub project.)"
 	}
 	_, err := ctx.EffectiveMessage.Reply(bot, toSendText, toSendOpt)
-	if err != nil {
-		toSendOpt.ParseMode = gotgbot.ParseModeNone // fall back and don't format message
-		_, err = ctx.EffectiveMessage.Reply(bot, toSendText, toSendOpt)
-	}
 	return err
 }
 

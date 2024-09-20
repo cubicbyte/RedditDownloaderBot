@@ -15,7 +15,7 @@ var disableIncludeLinkInCaption = util.ParseEnvironmentVariableBool("DISABLE_LIN
 
 // The characters which needs to be escaped based on
 // https://core.telegram.org/bots/api#formatting-options
-var markdownEscaper = strings.NewReplacer("_", "\\_", "*", "\\*", "[", "\\[", "]", "\\]", "(", "\\(", ")", "\\)", "~", "\\~", "`", "\\`", ">", "\\>", "#", "\\#", "+", "\\+", "-", "\\-", "=", "\\=", "|", "\\|", "{", "\\{", "}", "\\}", ".", "\\.", "!", "\\!")
+var markdownEscaper = strings.NewReplacer("\\", "\\\\", "_", "\\_", "*", "\\*", "[", "\\[", "]", "\\]", "(", "\\(", ")", "\\)", "~", "\\~", "`", "\\`", ">", "\\>", "#", "\\#", "+", "\\+", "-", "\\-", "=", "\\=", "|", "\\|", "{", "\\{", "}", "\\}", ".", "\\.", "!", "\\!")
 
 // createPhotoInlineKeyboard creates inline keyboards to get the quality info of a photo
 // Each row represents a quality and each row has two columns: Send as photo or send as file
