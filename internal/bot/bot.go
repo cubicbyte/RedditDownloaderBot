@@ -100,7 +100,11 @@ func (c *Client) fetchPostDetailsAndSend(bot *gotgbot.Bot, ctx *ext.Context) err
 	}
 	// Check the result type
 	toSendText := ""
-	toSendOpt := &gotgbot.SendMessageOpts{}
+	toSendOpt := &gotgbot.SendMessageOpts{
+		LinkPreviewOptions: &gotgbot.LinkPreviewOptions{
+			IsDisabled: true,
+		},
+	}
 	switch data := result.(type) {
 	case reddit.FetchResultText:
 		toSendText = escapeMarkdown(data.Title + "\n" + data.Text)
